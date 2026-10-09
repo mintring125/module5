@@ -1,0 +1,20 @@
+{
+  "name": "aiedap-module5-pixel-lecture",
+  "version": "2.0.0",
+  "description": "AIEDAP 모듈5 강의 슬라이드 동기화 + 픽셀 캐릭터 질문 말풍선 (Vercel + Ably)",
+  "private": true,
+  "scripts": {
+    "build": "node tools/build-static.js",
+    "dev": "node server.js",
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "ably": "^2.29.0",
+    "express": "^5.2.1",
+    "galmuri": "^2.40.3",
+    "qrcode-generator": "^1.5.2"
+  }
+}

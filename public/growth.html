@@ -1,0 +1,118 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>성장 단계 획득 모션</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    body { overflow: auto; }
+    .wrap { max-width: 960px; margin: 0 auto; padding: 24px 16px 48px; }
+    h1 { font-size: 22px; margin: 0 0 6px; color: #fff; }
+    .sub { color: #b8bfdc; font-size: 13px; margin: 0 0 18px; line-height: 1.6; }
+    .row { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+    .px-btn[aria-pressed='true'] { background: var(--accent-2); }
+    .stage-view {
+      position: relative; height: 480px; margin: 16px 0;
+      background: radial-gradient(circle at 50% 70%, #2a3866 0, #141a2e 70%);
+      border: 4px solid #0c1020; display: flex; align-items: flex-end; justify-content: center;
+    }
+    .stage-view canvas { height: 420px; max-width: 100%; margin-bottom: 16px; }
+    .caption { position: absolute; top: 14px; left: 0; right: 0; text-align: center; font-size: 22px; font-weight: 700; color: var(--accent-2); text-shadow: 3px 3px 0 #000; }
+    .caption small { display: block; font-size: 13px; color: #b8bfdc; text-shadow: none; margin-top: 4px; }
+    .missing { color: #b8bfdc; font-size: 14px; align-self: center; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>AIEDAP 성장 단계 획득 모션</h1>
+    <p class="sub">단계를 획득하면 캐릭터가 빙글 돌며 다음 단계로 자라나고, 단계마다 다른 기쁨 동작을 합니다.<br>
+      1단계 입문가 → 2단계 탐색가 → 3단계 실천가 → 4단계 전문가 → 5단계 선도자 → 6단계 개척자</p>
+    <div class="row" id="sexRow">
+      <button class="px-btn" data-sex="boy" aria-pressed="true">남학생</button>
+      <button class="px-btn" data-sex="girl" aria-pressed="false">여학생</button>
+    </div>
+    <div class="row" id="stageRow"></div>
+    <div class="row">
+      <button class="px-btn primary" id="playAll">▶ 1→6단계 연속 재생</button>
+    </div>
+    <div class="stage-view">
+      <div class="caption" id="caption"></div>
+      <canvas id="cv" width="300" height="420"></canvas>
+    </div>
+  </div>
+  <script>
+    const STAGES = ['입문가', '탐색가', '실천가', '전문가', '선도자', '개척자'];
+    const clipName = (sex, stage) => (stage === 1 ? `${sex}-1` : `${sex}-${stage - 1}to${stage}`);
+    const $ = (id) => document.getElementById(id);
+    let sex = 'boy';
+    let manifest = {};
+    let token = 0;
+    const images = new Map();
+
+    const loadImg = (src) => {
+      if (!images.has(src)) images.set(src, new Promise((res, rej) => { const i = new Image(); i.onload = () => res(i); i.onerror = rej; i.src = src; }));
+      return images.get(src);
+    };
+
+    // 스트립을 한 번 재생하고, 끝 프레임(그 단계 자세)에서 멈춘다
+    async function play(stage) {
+      const my = ++token;
+      const m = manifest[clipName(sex, stage)];
+      $('caption').innerHTML = `${stage}단계 ${STAGES[stage - 1]} 획득!<small>${stage === 1 ? '첫 단계' : `${stage - 1}단계 ${STAGES[stage - 2]}에서 성장`}</small>`;
+      const cv = $('cv');
+      const ctx = cv.getContext('2d');
+      if (!m) {
+        ctx.clearRect(0, 0, cv.width, cv.height);
+        $('caption').innerHTML += '<small>(아직 만들지 않은 모션입니다)</small>';
+        return new Promise((done) => setTimeout(() => done(my === token), 1200));
+      }
+      const img = await loadImg(m.strip);
+      if (my !== token) return false;
+      cv.width = m.w;
+      cv.height = m.h;
+      // 타이머로 칸을 넘긴다 (requestAnimationFrame은 탭이 가려지면 멈춰 연속 재생이 끊긴다)
+      return new Promise((done) => {
+        let i = 0;
+        const timer = setInterval(() => {
+          if (my !== token) { clearInterval(timer); return done(false); }
+          ctx.clearRect(0, 0, m.w, m.h);
+          ctx.drawImage(img, (i % m.cols) * m.w, Math.floor(i / m.cols) * m.h, m.w, m.h, 0, 0, m.w, m.h);
+          if (++i >= m.frames) {
+            clearInterval(timer);
+            setTimeout(() => done(my === token), 900); // 마지막 자세(획득한 단계)를 잠깐 보여 준다
+          }
+        }, 1000 / m.fps);
+      });
+    }
+
+    function renderStages() {
+      $('stageRow').innerHTML = '';
+      STAGES.forEach((name, i) => {
+        const b = document.createElement('button');
+        b.className = 'px-btn';
+        b.textContent = `${i + 1}단계 ${name}`;
+        b.addEventListener('click', () => play(i + 1));
+        $('stageRow').appendChild(b);
+      });
+    }
+
+    document.querySelectorAll('#sexRow button').forEach((b) => b.addEventListener('click', () => {
+      sex = b.dataset.sex;
+      document.querySelectorAll('#sexRow button').forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      play(1);
+    }));
+    $('playAll').addEventListener('click', async () => {
+      for (let s = 1; s <= 6; s++) {
+        if (!(await play(s))) break; // 다른 버튼을 누르면 연속 재생을 멈춘다
+      }
+    });
+
+    fetch('/achieve/manifest.json', { cache: 'no-cache' }).then((r) => (r.ok ? r.json() : {})).catch(() => ({})).then((m) => {
+      manifest = m;
+      renderStages();
+      play(1);
+    });
+  </script>
+</body>
+</html>

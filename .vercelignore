@@ -1,0 +1,7 @@
+.env
+.env.*
+art/
+.claude/
+.omc/
+node_modules/
+*.log

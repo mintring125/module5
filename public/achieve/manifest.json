@@ -1,0 +1,110 @@
+{
+  "boy-1": {
+    "strip": "/achieve/boy-1.strip.webp",
+    "anim": "/achieve/boy-1.webp",
+    "frames": 73,
+    "cols": 10,
+    "w": 315,
+    "h": 420,
+    "fps": 12.0
+  },
+  "boy-1to2": {
+    "strip": "/achieve/boy-1to2.strip.webp",
+    "anim": "/achieve/boy-1to2.webp",
+    "frames": 73,
+    "cols": 10,
+    "w": 315,
+    "h": 420,
+    "fps": 12.0
+  },
+  "boy-2to3": {
+    "strip": "/achieve/boy-2to3.strip.webp",
+    "anim": "/achieve/boy-2to3.webp",
+    "frames": 73,
+    "cols": 10,
+    "w": 315,
+    "h": 420,
+    "fps": 12.0
+  },
+  "boy-3to4": {
+    "strip": "/achieve/boy-3to4.strip.webp",
+    "anim": "/achieve/boy-3to4.webp",
+    "frames": 73,
+    "cols": 10,
+    "w": 315,
+    "h": 420,
+    "fps": 12.0
+  },
+  "boy-4to5": {
+    "strip": "/achieve/boy-4to5.strip.webp",
+    "anim": "/achieve/boy-4to5.webp",
+    "frames": 73,
+    "cols": 10,
+    "w": 315,
+    "h": 420,
+    "fps": 12.0
+  },
+  "boy-5to6": {
+    "strip": "/achieve/boy-5to6.strip.webp",
+    "anim": "/achieve/boy-5to6.webp",
+    "frames": 73,
+    "cols": 10,
+    "w": 315,
+    "h": 420,
+    "fps": 12.0
+  },
+  "girl-1": {
+    "strip": "/achieve/girl-1.strip.webp",
+    "anim": "/achieve/girl-1.webp",
+    "frames": 73,
+    "cols": 10,
+    "w": 315,
+    "h": 420,
+    "fps": 12.0
+  },
+  "girl-1to2": {
+    "strip": "/achieve/girl-1to2.strip.webp",
+    "anim": "/achieve/girl-1to2.webp",
+    "frames": 73,
+    "cols": 10,
+    "w": 315,
+    "h": 420,
+    "fps": 12.0
+  },
+  "girl-2to3": {
+    "strip": "/achieve/girl-2to3.strip.webp",
+    "anim": "/achieve/girl-2to3.webp",
+    "frames": 73,
+    "cols": 10,
+    "w": 315,
+    "h": 420,
+    "fps": 12.0
+  },
+  "girl-3to4": {
+    "strip": "/achieve/girl-3to4.strip.webp",
+    "anim": "/achieve/girl-3to4.webp",
+    "frames": 73,
+    "cols": 10,
+    "w": 315,
+    "h": 420,
+    "fps": 12.0
+  },
+  "girl-4to5": {
+    "strip": "/achieve/girl-4to5.strip.webp",
+    "anim": "/achieve/girl-4to5.webp",
+    "frames": 73,
+    "cols": 10,
+    "w": 315,
+    "h": 420,
+    "fps": 12.0
+  },
+  "girl-5to6": {
+    "strip": "/achieve/girl-5to6.strip.webp",
+    "anim": "/achieve/girl-5to6.webp",
+    "frames": 73,
+    "cols": 10,
+    "w": 315,
+    "h": 420,
+    "fps": 12.0
+  }
+}

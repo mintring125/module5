@@ -1,0 +1,85 @@
+{
+  "kind": "sprite-gen-image-report",
+  "provider": "codex",
+  "prompt": "The exact same character as the reference image, same outfit, hairstyle, colors, proportions and pixel art style, now turned to face the viewer in a front view, standing upright with a warm friendly smile and mouth slightly open as if talking, arms relaxed at the sides with empty hands, whole body including feet visible, crisp hard-edged pixels with a clean dark 1-pixel outline, no anti-aliasing, no ground, no shadow, no text.\n\nSeen from the front: the whole body and head turned to face the viewer squarely, the chest, hips and the toes of both feet pointing straight at the viewer and the face centred between both ears, looking straight out of the image, not turned toward either side even when a reference picture shows the character from another angle.\n\nThe entire background is one perfectly flat, uniform pure magenta chroma-key fill (#FF00FF) with no gradient, no texture, no shadow and no ground line.",
+  "out": "C:\\Users\\김형석일반대초등수학교육\\module5\\art\\student\\front\\0.png",
+  "raw": "C:\\Users\\김형석일반대초등수학교육\\module5\\art\\student\\front\\0.png.raw.png",
+  "raw_bytes": 1357910,
+  "elapsed_seconds": 57.159,
+  "model": null,
+  "session_id": "01a11bc5-f4af-7b31-9df7-2f63aa70193b",
+  "refs": [
+    "C:\\Users\\김형석일반대초등수학교육\\module5\\art\\student\\bases\\0.png"
+  ],
+  "transparent": true,
+  "alpha": {
+    "strategy": "chroma",
+    "strategy_source": "refs-attached",
+    "key_background": {
+      "injected": true,
+      "key": "magenta"
+    },
+    "raw_alpha": {
+      "mode": "RGB",
+      "has_alpha_band": false,
+      "verdict": "no-alpha",
+      "alpha_zero_pct": 0.0,
+      "border_alpha_zero_pct": 0.0
+    },
+    "out": "C:\\Users\\김형석일반대초등수학교육\\module5\\art\\student\\front\\0.png",
+    "mode": "RGBA",
+    "method": "ycbcr",
+    "size": "1254x1254",
+    "key": "magenta",
+    "keyed_pixels": 1312628,
+    "fringe_pixels": 48,
+    "cleaned_transparent_rgb_pixels": 3625,
+    "alpha_zero_pct": 83.47,
+    "stale_transparent_rgb_pixels": 0
+  },
+  "chroma": {
+    "out": "C:\\Users\\김형석일반대초등수학교육\\module5\\art\\student\\front\\0.png",
+    "mode": "RGBA",
+    "method": "ycbcr",
+    "size": "1254x1254",
+    "key": "magenta",
+    "keyed_pixels": 1312628,
+    "fringe_pixels": 48,
+    "cleaned_transparent_rgb_pixels": 3625,
+    "alpha_zero_pct": 83.47,
+    "stale_transparent_rgb_pixels": 0
+  },
+  "extra": {
+    "inline_results": 1,
+    "rollout_cleaned": true,
+    "transparent_background_reported": false,
+    "trim_alpha": {
+      "bbox": [
+        431,
+        119,
+        806,
+        1172
+      ],
+      "before": [
+        1254,
+        1254
+      ],
+      "after": [
+        375,
+        1053
+      ],
+      "margin_px": {
+        "left": 431,
+        "top": 119,
+        "right": 448,
+        "bottom": 82
+      }
+    },
+    "view": {
+      "direction": "front",
+      "facing": null,
+      "handed": []
+    }
+  },
+  "provider_resolved_from": "explicit"
+}

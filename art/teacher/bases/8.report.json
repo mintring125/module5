@@ -1,0 +1,37 @@
+{
+  "kind": "sprite-gen-image-report",
+  "provider": "codex",
+  "prompt": "High quality pixel art game character sprite of a sophisticated, fashionable modern teacher in a stylish chibi style. One single full-body character with chibi proportions about 3 heads tall (large head, small body), attractive refined adult face with mature features (not a child), confident elegant posture, polished well-fitted trendy outfit with tasteful details clearly readable at small size, crisp hard-edged pixels with a clean dark 1-pixel outline, rich but limited palette with subtle shading, no anti-aliasing, no dithering noise, standing relaxed idle pose with arms down and empty hands, whole body including feet visible, centered, on a flat solid pure magenta #FF00FF background with no gradient, no ground, no shadow, no text. Character: a stylish outdoorsy Korean female geography teacher in her 30s with a long high brown ponytail under a cream bucket hat, an olive green lightweight utility jacket over a cream knit top, black slim cargo pants, gray trail sneakers.\n\nSeen from the exact side, facing right.\n\nLayout: the last attached image is a layout guide, not part of the character. It shows the frame, its inner safe area (the blue box), the center line, an orange crown line and a teal floor line. Place the anatomical top of the skull on the orange line, 19% of the frame height from the top, and the lowest supporting sole on the teal line, 81% from the top, centered on the center line: an upright crown-to-floor span of 62% of the frame height. Ignore hair tufts, raised limbs, hats, accessories and props when identifying the crown; they may rise above the orange line but stay inside the blue box. The teal line sits INSIDE the safe area, above the bottom safe padding: it is a ground-contact line, not a frame edge. The supporting soles must touch it and may not float above it, and the space below it stays empty. The colored lines set the character's scale and height in the frame; they are not artwork. Do not reproduce the layout guide itself: no boxes, guide lines, center marks, labels, guide colors or the guide's grey background may appear in the output.",
+  "out": "C:\\Users\\김형석일반대초등수학교육\\module5\\art\\bases\\8.png",
+  "raw": "C:\\Users\\김형석일반대초등수학교육\\module5\\art\\bases\\8.png.raw.png",
+  "raw_bytes": 1425693,
+  "elapsed_seconds": 71.764,
+  "model": null,
+  "session_id": "01a11bb4-c554-75a2-831e-bafd838bb3ae",
+  "refs": [],
+  "transparent": false,
+  "alpha": null,
+  "chroma": null,
+  "extra": {
+    "inline_results": 1,
+    "rollout_cleaned": true,
+    "transparent_background_reported": false,
+    "view": {
+      "direction": "side",
+      "facing": "right",
+      "handed": []
+    },
+    "layout_guide": {
+      "shape": "square",
+      "width": 1024,
+      "height": 1024,
+      "safe_margin_x": 96,
+      "safe_margin_y": 96,
+      "size": 1024,
+      "safe_margin": 96,
+      "crown_y": 192,
+      "floor_y": 831
+    }
+  },
+  "provider_resolved_from": "explicit"
+}

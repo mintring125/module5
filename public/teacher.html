@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>강사 화면 · 픽셀 강의실</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body class="teacher">
+  <div class="app">
+    <div class="area" id="area">
+      <div class="board" id="board">
+        <div class="slide"><img id="slideImg" alt="강의 슬라이드"></div>
+        <div class="ground"></div>
+        <div class="actors"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="controls" id="controls">
+    <button class="px-btn" id="prevBtn" title="이전 (←)">◀</button>
+    <span class="num" id="slideNum">- / -</span>
+    <button class="px-btn" id="nextBtn" title="다음 (→, Space)">▶</button>
+    <span class="pill" id="people">0명</span>
+    <div class="theme-seg" id="themeSeg" role="group" aria-label="캐릭터 버전 (T)">
+      <button class="px-btn" data-theme="pixel" title="픽셀 캐릭터">픽셀</button>
+      <button class="px-btn" data-theme="teacher" title="세련된 선생님">선생님</button>
+      <button class="px-btn" data-theme="student" title="중학생">중학생</button>
+    </div>
+    <button class="px-btn" id="qBtn" title="질문 목록 (Q)">질문 <span id="qCount">0</span></button>
+    <button class="px-btn" id="joinBtn" title="접속 안내 QR (J)">접속 QR</button>
+    <button class="px-btn" id="fsBtn" title="전체화면 (F)">전체화면</button>
+    <span class="dot off" id="dot" title="서버 연결 상태"></span>
+  </div>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <aside class="qpanel" id="qpanel" aria-label="질문 목록">
+    <header><span>학생 질문 목록</span><span><button class="px-btn" id="qClear">지우기</button> <button class="px-btn" id="qClose">닫기</button></span></header>
+    <ol id="qlist"><li class="empty">아직 질문이 없습니다.</li></ol>
+  </aside>
+
+  <div class="modal" id="authModal">
+    <form class="card" id="authForm" autocomplete="off">
+      <h1>강사 로그인</h1>
+      <p class="sub">강사 키를 입력하면 이 화면에서 넘기는 슬라이드가 모든 학생 화면에 동기화됩니다.</p>
+      <input class="px-input" id="keyInput" type="password" placeholder="강사 키" required>
+      <p class="err" id="authErr"></p>
+      <div class="actions"><button class="px-btn primary">시작하기 ▶</button></div>
+    </form>
+  </div>
+
+  <div class="modal" id="joinModal" hidden>
+    <div class="card join-card">
+      <h1>📱 강의실 접속하기</h1>
+      <div class="url" id="joinUrl"></div>
+      <div id="qr"></div>
+      <p class="hint">휴대폰 카메라로 QR을 찍거나 주소를 입력하세요.<br>닫기: <kbd>J</kbd> 또는 <kbd>Esc</kbd></p>
+    </div>
+  </div>
+
+  <script src="/vendor/ably.min.js"></script>
+  <script src="/vendor/qrcode.js"></script>
+  <script src="/js/sprites.js"></script>
+  <script src="/js/stage.js"></script>
+  <script src="/js/realtime.js"></script>
+  <script src="/js/teacher.js"></script>
+</body>
+</html>

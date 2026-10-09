@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>AIEDAP 픽셀 강의실</title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+  <div class="app">
+    <div class="topbar">
+      <span class="title">AIEDAP 픽셀 강의실</span>
+      <span class="pill"><span class="dot off" id="dot"></span><span id="conn">연결 중…</span></span>
+      <span class="pill" id="slideNum">- / -</span>
+      <span class="spacer"></span>
+      <span class="pill" id="people">0명</span>
+      <button class="link-btn" id="changeBtn" hidden>캐릭터 바꾸기</button>
+    </div>
+    <div class="area" id="area">
+      <div class="board" id="board">
+        <div class="slide"><img id="slideImg" alt="강의 슬라이드"></div>
+        <div class="ground"></div>
+        <div class="actors"></div>
+      </div>
+    </div>
+    <form class="chatbar" id="chatForm" autocomplete="off">
+      <div class="quick" id="quick">
+        <button type="button" class="px-btn" data-say="❓ 질문 있어요!" title="질문 있어요">❓</button>
+        <button type="button" class="px-btn" data-say="👍 이해했어요" title="이해했어요">👍</button>
+        <button type="button" class="px-btn" data-say="😮 오!" title="놀라워요">😮</button>
+        <button type="button" class="px-btn" data-say="👏👏👏" title="박수">👏</button>
+      </div>
+      <input class="px-input" id="msg" maxlength="80" placeholder="궁금한 점을 입력하면 내 캐릭터가 말해요" disabled>
+      <span class="count" id="count">0/80</span>
+      <button class="px-btn primary" id="sendBtn" disabled>말하기</button>
+    </form>
+  </div>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+
+  <div class="modal" id="joinModal" hidden>
+    <form class="card" id="joinForm" autocomplete="off">
+      <h1>강의실 입장</h1>
+      <p class="sub">강사님이 넘기는 슬라이드가 내 화면에 자동으로 따라옵니다.<br>궁금한 점을 입력하면 내 픽셀 캐릭터가 슬라이드 아래에서 말풍선으로 말해요.</p>
+      <label class="field" for="nameInput">이름 (별명)</label>
+      <input class="px-input" id="nameInput" maxlength="10" placeholder="예: 김선생" required>
+      <label class="field">성별</label>
+      <div class="seg" id="genderSeg">
+        <button type="button" class="px-btn" data-g="m" aria-pressed="false">남자</button>
+        <button type="button" class="px-btn" data-g="f" aria-pressed="false">여자</button>
+      </div>
+      <label class="field">캐릭터 고르기</label>
+      <div class="chars" id="chars"></div>
+      <p class="err" id="joinErr"></p>
+      <div class="actions"><button class="px-btn primary" id="joinBtn">입장하기 ▶</button></div>
+    </form>
+  </div>
+
+  <script src="/vendor/ably.min.js"></script>
+  <script src="/js/sprites.js"></script>
+  <script src="/js/stage.js"></script>
+  <script src="/js/realtime.js"></script>
+  <script src="/js/student.js"></script>
+</body>
+</html>

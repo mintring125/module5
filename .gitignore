@@ -1,0 +1,27 @@
+node_modules/
+.omc/
+.claude/
+.vercel/
+*.log
+# 비밀 키 (ABLY_API_KEY, TEACHER_KEY)
+.env
+.env.*
+# tools/build-static.js 가 만드는 파일
+public/vendor/
+public/fonts/
+public/config.json
+# sprite-gen 중간 산출물(영상·프레임, 수백 MB)은 올리지 않는다. 웹에 쓰는 결과는 public/chars/ 에 있다.
+art/*/video/
+art/bases-*/
+art/*.png
+art/*/*.png
+
+.vercel
+.env*
+!.env.example
+# 성장 단계 모션 중간 산출물 (영상·프레임·잘라 낸 그림은 스크립트로 다시 만들 수 있다)
+art/achieve/clips/
+art/achieve/idle/
+art/achieve/crops/
+art/achieve/prep/
+art/achieve/cut/
