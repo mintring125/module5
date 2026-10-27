@@ -42,7 +42,7 @@
     const control = client.channels.get(`${cfg.room}:control`, { params: { rewind: '1' } });
     const room = client.channels.get(`${cfg.room}:room`);
 
-    const handlers = { state: [], users: [], chat: [], connection: [] };
+    const handlers = { state: [], users: [], chat: [], connection: [], who: [] };
     const emit = (name, v) => handlers[name].forEach((fn) => fn(v));
 
 
@@ -74,7 +74,10 @@
     room.subscribe('bye', (m) => {
       if (people.delete(m.clientId)) emitUsers();
     });
-    room.subscribe('who', () => setTimeout(sendHello, Math.random() * 1500)); // 한꺼번에 몰리지 않게 흩어서 답한다
+    room.subscribe('who', (m) => {
+      setTimeout(sendHello, Math.random() * 1500); // 한꺼번에 몰리지 않게 흩어서 답한다
+      if (m.clientId !== 'teacher') emit('who', m.clientId); // 강사 화면은 새로 온 사람에게 현재 상태를 다시 보낸다
+    });
     room.whenState('attached').then(() => room.publish('who', {}).catch(() => {}));
     client.connection.on('connected', () => room.publish('who', {}).catch(() => {})); // 재연결 뒤 목록 다시 받기
 

@@ -108,6 +108,13 @@
     });
     // 처음 여는 강의실이면(받은 상태가 없으면) 지금 상태를 올려 둔다
     setTimeout(() => { if (!gotState) publish(); }, 2500);
+    // Ably는 메시지를 2분만 보관하므로, 늦게 들어온 학생이 1번 슬라이드에서 시작하지 않도록
+    // 누가 들어올 때마다 현재 상태를 다시 보낸다 (여럿이 한꺼번에 들어와도 한 번만)
+    let resendTimer = null;
+    rt.on('who', () => {
+      clearTimeout(resendTimer);
+      resendTimer = setTimeout(publish, 800);
+    });
   }
 
   $('authForm').addEventListener('submit', (e) => {
