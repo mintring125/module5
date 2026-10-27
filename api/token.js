@@ -1,5 +1,5 @@
 // Vercel 함수: Ably 접속 토큰 발급
-//  - 학생: room 채널(질문·참여자 알림)에 보내기, control 채널(슬라이드/버전)은 듣기만
+//  - 학생: room 채널(질문·참여자 알림·응답)에 보내기, control 채널(슬라이드/버전)은 듣기만
 //  - 강사: x-teacher-key 가 맞을 때만 슬라이드/버전 채널에 보낼 수 있음
 // 환경변수: ABLY_API_KEY(필수), TEACHER_KEY(배포 시 필수), ROOM(선택, 기본 aiedap-m5)
 const Ably = require('ably');
@@ -13,8 +13,10 @@ module.exports = async (req, res) => {
   if (!apiKey) return res.status(500).json({ error: 'ABLY_API_KEY 환경변수가 설정되지 않았습니다.' });
 
   const teacherKey = process.env.TEACHER_KEY || (process.env.VERCEL ? '' : 'aiedap2026');
-  const control = `${ROOM}:control`; // 슬라이드·캐릭터 버전 (강사만 보냄)
-  const room = `${ROOM}:room`; // 질문·참여자 알림(hello/who/bye)
+  // 강의실 두 개: 기존 슬라이드 이미지 강의(/), 캐릭터 성장형 라이브 강의(/v2). 채널을 따로 써서 서로 섞이지 않는다
+  const controls = [`${ROOM}:control`, `${ROOM}:v2-control`]; // 슬라이드·상태 (강사만 보냄)
+  const rooms = [`${ROOM}:room`, `${ROOM}:v2-room`]; // 질문·참여자 알림·응답
+  const grant = (list, ops) => Object.fromEntries(list.map((c) => [c, ops]));
 
   let clientId;
   let capability;
@@ -22,11 +24,11 @@ module.exports = async (req, res) => {
     if (!teacherKey) return res.status(500).json({ error: 'TEACHER_KEY 환경변수가 설정되지 않았습니다.' });
     if (req.headers['x-teacher-key'] !== teacherKey) return res.status(403).json({ error: '강사 키가 올바르지 않습니다.' });
     clientId = 'teacher';
-    capability = { [control]: ['publish', 'subscribe', 'history'], [room]: ['publish', 'subscribe', 'history'] };
+    capability = { ...grant(controls, ['publish', 'subscribe', 'history']), ...grant(rooms, ['publish', 'subscribe', 'history']) };
   } else {
     clientId = String(req.query.uid || '');
     if (!/^[a-z0-9]{6,40}$/i.test(clientId) || clientId === 'teacher') return res.status(400).json({ error: 'uid가 올바르지 않습니다.' });
-    capability = { [control]: ['subscribe', 'history'], [room]: ['publish', 'subscribe', 'history'] };
+    capability = { ...grant(controls, ['subscribe', 'history']), ...grant(rooms, ['publish', 'subscribe', 'history']) };
   }
 
   try {

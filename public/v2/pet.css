@@ -1,0 +1,83 @@
+.lecture-pet {
+  position: fixed; z-index: 50; right: max(18px, env(safe-area-inset-right));
+  bottom: max(16px, env(safe-area-inset-bottom)); width: var(--pet-body-width);
+  font-family: var(--font); color: #13286b; pointer-events: none;
+  --pet-body-height: clamp(240px, 32dvh, 380px);
+  --pet-body-width: calc(var(--pet-body-height) * .75); --pet-head-gap: .15;
+}
+/* 공통 모션 프레임의 여백만큼 말풍선을 내려 작은 단계의 머리 위에 둔다. */
+.lecture-pet[data-level="1"] { --pet-head-gap: .57; }
+.lecture-pet[data-level="2"] { --pet-head-gap: .46; }
+.lecture-pet[data-level="3"] { --pet-head-gap: .37; }
+.lecture-pet[data-level="4"] { --pet-head-gap: .28; }
+.lecture-pet[data-level="5"] { --pet-head-gap: .21; }
+.pet-body {
+  display: block; position: relative; width: var(--pet-body-width); height: var(--pet-body-height); padding: 0;
+  border: 0; background: none; cursor: pointer; pointer-events: auto;
+  transform-origin: center bottom; animation: pet-breathe 3.8s ease-in-out infinite;
+  -webkit-tap-highlight-color: transparent;
+}
+.pet-body::after {
+  content: ''; position: absolute; bottom: -2px; left: 24px; right: 24px; height: 10px;
+  z-index: -1; background: #0003; border-radius: 50%; filter: blur(3px);
+}
+.pet-image, .pet-growth { position: absolute; bottom: 0; left: 0; width: 100%; height: 100%; object-fit: contain; object-position: center bottom; filter: drop-shadow(0 5px 8px #05102f33); }
+.lecture-pet [hidden] { display: none; }
+.pet-body:focus-visible { outline: 3px solid #ff9a3c; outline-offset: 6px; border-radius: 22px; }
+.pet-bubble {
+  position: absolute; right: 8px; bottom: calc(100% + 14px - var(--pet-body-height) * var(--pet-head-gap)); width: clamp(224px, 18vw, 320px);
+  padding: 14px 17px; border: 1px solid #d3e4f8; border-radius: 18px;
+  background: #fff; box-shadow: 0 8px 28px #04132c26; font-size: clamp(14px, 1vw, 18px);
+  line-height: 1.55; font-weight: 650; word-break: keep-all;
+  opacity: 0; transform: translateY(6px); transition: opacity .2s, transform .2s;
+}
+.pet-bubble::after { content: ''; position: absolute; right: 42px; bottom: -7px; width: 13px; height: 13px; background: #fff; border-right: 1px solid #d3e4f8; border-bottom: 1px solid #d3e4f8; transform: rotate(45deg); }
+.lecture-pet.speaking .pet-bubble, .lecture-pet:focus-within .pet-bubble, .lecture-pet:hover .pet-bubble { opacity: 1; transform: none; }
+.pet-caption { display: flex; align-items: center; justify-content: center; gap: 5px; margin-top: 9px; padding: 5px 9px; border-radius: 999px; background: #fffefb; box-shadow: 0 3px 12px #0002; font-size: clamp(11px, .9vw, 14px); font-weight: 750; white-space: nowrap; }
+.pet-status { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+.pet-replay { flex: none; width: 26px; height: 26px; padding: 0; border: 0; border-radius: 50%; background: #eaf4ff; color: #13286b; font-size: 19px; cursor: pointer; pointer-events: auto; }
+.pet-replay:disabled { opacity: .4; cursor: default; }
+.pet-replay:focus-visible { outline: 2px solid #ff9a3c; outline-offset: 2px; }
+.pet-dot { width: 5px; height: 5px; border-radius: 50%; background: #2bb673; }
+.pet-spark { position: absolute; right: 0; top: 15px; color: #ff9a3c; font-size: 24px; opacity: 0; }
+.lecture-pet[data-state="cheer"] .pet-body { animation: pet-hop .65s ease-in-out infinite; }
+.lecture-pet .pet-spark { opacity: 1; animation: pet-twinkle 2.4s ease-in-out infinite; }
+.lecture-pet[data-state="cheer"] .pet-spark { animation-duration: 1s; }
+.lecture-pet[data-state="think"] .pet-body { animation: pet-think 4s ease-in-out infinite; }
+.lecture-pet[data-state="write"] .pet-body, .lecture-pet[data-state="tablet"] .pet-body { animation: pet-read 3s ease-in-out infinite; }
+.lecture-pet[data-state="sleepy"] .pet-body { animation-duration: 6s; }
+.lecture-pet[data-state="sleepy"] .pet-spark { opacity: .8; color: #b9defe; font-size: 18px; }
+.lecture-pet[data-state="sleepy"] .pet-spark::after { content: ' z'; }
+.lecture-pet.growing .pet-body { animation: none; }
+.lecture-pet.growing { --pet-head-gap: 0; }
+.lecture-pet.growing .pet-spark { opacity: 0; animation: none; }
+@keyframes pet-breathe { 0%, 100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-4px) scale(1.015); } }
+@keyframes pet-hop { 0%, 100% { transform: translateY(0) rotate(-2deg); } 50% { transform: translateY(-12px) rotate(2deg); } }
+@keyframes pet-think { 0%, 100% { transform: rotate(-3deg); } 50% { transform: rotate(3deg) translateY(-3px); } }
+@keyframes pet-read { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(2px) rotate(-1deg); } }
+@keyframes pet-twinkle { 0%, 100% { transform: scale(.8); } 50% { transform: scale(1.2) rotate(15deg); } }
+.lecture-pet.still *, .lecture-pet.still .pet-body { animation: none !important; transition: none; }
+@media (prefers-reduced-motion: reduce) { .lecture-pet *, .lecture-pet .pet-body { animation: none !important; transition: none; } }
+@media (max-width: 600px), (max-height: 500px) {
+  .lecture-pet { right: 12px; bottom: 12px; --pet-body-width: 94px; --pet-body-height: 132px; }
+  .pet-bubble { width: 196px; font-size: 12px; padding: 11px 14px; }
+  .pet-caption { font-size: 9px; padding: 4px 6px; }
+  .single-slide .lecture-pet { bottom: max(68px, calc(env(safe-area-inset-bottom) + 54px)); }
+}
+
+/* 슬라이드 오른쪽 아래에 붙은 모양: 크기를 슬라이드 배율(--s)에 맞춘다 */
+.lecture-pet.anchored {
+  position: absolute; right: auto; bottom: auto; z-index: 6;
+  --pet-body-height: calc(305px * var(--s, 1)); --pet-body-width: calc(230px * var(--s, 1));
+}
+.lecture-pet.anchored .pet-bubble {
+  right: calc(30px * var(--s, 1)); width: max(160px, calc(360px * var(--s, 1)));
+  padding: max(8px, calc(16px * var(--s, 1))) max(10px, calc(22px * var(--s, 1)));
+  border-radius: max(10px, calc(22px * var(--s, 1))); font-size: max(11px, calc(25px * var(--s, 1)));
+}
+.lecture-pet.anchored .pet-caption {
+  margin-top: calc(6px * var(--s, 1)); padding: max(2px, calc(5px * var(--s, 1))) max(6px, calc(12px * var(--s, 1)));
+  font-size: max(9px, calc(19px * var(--s, 1))); gap: max(3px, calc(6px * var(--s, 1)));
+}
+.lecture-pet.anchored .pet-replay { width: max(16px, calc(30px * var(--s, 1))); height: max(16px, calc(30px * var(--s, 1))); font-size: max(11px, calc(20px * var(--s, 1))); }
+.lecture-pet.anchored .pet-spark { top: calc(30px * var(--s, 1)); right: calc(10px * var(--s, 1)); font-size: max(14px, calc(40px * var(--s, 1))); }

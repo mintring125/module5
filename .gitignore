@@ -25,3 +25,8 @@ art/achieve/idle/
 art/achieve/crops/
 art/achieve/prep/
 art/achieve/cut/
+# v2 작업 중간물: 생성 원본 중복본·점검 캡처
+art/v2/raw/*.raw.png
+art/v2/raw/*.log
+art/v2/review/
+art/**/*.png.json

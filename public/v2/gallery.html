@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>성장 여정 · 슬라이드 갤러리</title>
+  <link rel="stylesheet" href="/v2/v2.css">
+  <link rel="stylesheet" href="/v2/pet.css">
+  <style>
+    body { background: #0b1534; overflow: auto; }
+    .gallery-header { position: sticky; top: 0; z-index: 20; height: 60px; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 0 18px; background: #0b1534f5; border-bottom: 1px solid #293b61; color: #eaf4ff; }
+    .gallery-header h1 { margin: 0; font-size: 16px; font-weight: 750; }
+    .mode-switch { display: flex; gap: 4px; padding: 4px; border-radius: 12px; background: #17284c; }
+    .mode-switch a { padding: 7px 12px; border-radius: 8px; color: #c0cee5; font-size: 13px; font-weight: 700; text-decoration: none; white-space: nowrap; }
+    .mode-switch a[aria-current="page"] { color: #0b1534; background: #b9defe; }
+    .mode-switch a:focus-visible, .slide-open:focus-visible { outline: 3px solid #ff9a3c; outline-offset: -3px; }
+    .one { width: 100%; height: calc(100dvh - 114px); }
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; padding: 14px 14px max(250px, calc(clamp(240px, 32dvh, 380px) + 50px)); }
+    .cell { position: relative; aspect-ratio: 16 / 9; overflow: hidden; border-radius: 6px; outline-offset: 3px; }
+    .cell.active { outline: 2px solid #74bdfd; }
+    .slide-open { position: absolute; inset: 0; z-index: 9; border-radius: inherit; }
+    .cell .tagno { position: absolute; z-index: 9; left: 6px; top: 6px; background: #000c; color: #ffd34a; font: 700 12px sans-serif; padding: 2px 6px; border-radius: 4px; text-decoration: none; }
+    .tagno:focus-visible { outline: 3px solid #ff9a3c; }
+    .gallery-nav { height: 54px; display: flex; align-items: center; justify-content: center; gap: 18px; color: #eaf4ff; font-size: 14px; }
+    .gallery-nav button, .gallery-nav a { border: 1px solid #46618a; border-radius: 8px; padding: 7px 12px; background: #17284c; color: #fff; text-decoration: none; cursor: pointer; }
+    .gallery-nav button:disabled { opacity: .35; cursor: default; }
+    @media (max-width: 900px) { .grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px) { .gallery-header { padding: 0 10px; gap: 6px; } .gallery-header h1 { font-size: 13px; } .mode-switch a { font-size: 12px; padding: 7px 9px; } .grid { grid-template-columns: 1fr; } .gallery-nav { justify-content: flex-start; gap: 8px; padding-left: 10px; font-size: 12px; } }
+  </style>
+</head>
+<body>
+  <script src="/v2/deck.js"></script>
+  <script src="/v2/widgets.js"></script>
+  <script src="/v2/pet.js"></script>
+  <script>
+    // ?g=boy|girl  ?view=single 한 장씩 보기  ?i=번호(0부터)  ?still=1 애니메이션 정지
+    const qs = new URLSearchParams(location.search);
+    const gender = qs.get('g') === 'girl' ? 'girl' : 'boy';
+    const ctx = { gender, still: qs.has('still') };
+    const singleMode = qs.get('view') === 'single' || qs.has('i');
+    const allQuery = new URLSearchParams(qs);
+    allQuery.delete('view');
+    allQuery.delete('i');
+    const singleQuery = new URLSearchParams(qs);
+    singleQuery.set('view', 'single');
+    if (!singleQuery.has('i')) singleQuery.set('i', '0');
+    const header = document.createElement('header');
+    header.className = 'gallery-header';
+    header.innerHTML = `<h1>성장 여정 슬라이드</h1><nav class="mode-switch" aria-label="보기 모드"><a href="?${allQuery}" ${singleMode ? '' : 'aria-current="page"'}>전체 목록</a><a data-single-mode href="?${singleQuery}" ${singleMode ? 'aria-current="page"' : ''}>한 장씩 보기</a></nav>`;
+    document.body.appendChild(header);
+    const pet = LecturePet.mount(ctx);
+
+    function build(slide, host, onFit) {
+      const el = document.createElement('div');
+      el.className = `slide t-${gender}`;
+      el.innerHTML = Deck.render(slide, ctx);
+      host.appendChild(el);
+      const fit = () => {
+        const s = Math.min(host.clientWidth / 1920, host.clientHeight / 1080);
+        el.style.transform = `scale(${s})`;
+        el.style.left = `${(host.clientWidth - 1920 * s) / 2}px`;
+        el.style.top = `${(host.clientHeight - 1080 * s) / 2}px`;
+        onFit?.({ left: (host.clientWidth - 1920 * s) / 2, top: (host.clientHeight - 1080 * s) / 2, scale: s });
+      };
+      const observer = new ResizeObserver(fit);
+      observer.observe(host);
+      fit();
+      if (slide.widget) {
+        const entries = Widgets.demo(slide);
+        Widgets.renderResult(slide, el.querySelector(`[data-result="${slide.id}"]`), entries, { myValue: 3 });
+        const pill = el.querySelector(`[data-count="${slide.id}"]`);
+        if (pill) pill.textContent = `${Widgets.responseCount(slide, entries)}명 참여`;
+      }
+      const unmount = Deck.mount(el, ctx);
+      return () => { observer.disconnect(); unmount(); el.remove(); };
+    }
+
+    if (singleMode) {
+      document.body.classList.add('single-slide');
+      const host = document.createElement('div');
+      host.className = 'viewport one';
+      document.body.appendChild(host);
+      host.style.position = 'relative';
+      pet.anchor(host);
+      const nav = document.createElement('nav');
+      nav.className = 'gallery-nav';
+      nav.setAttribute('aria-label', '슬라이드 이동');
+      nav.innerHTML = `<a href="?${allQuery}">전체 목록</a><button type="button" data-prev aria-label="이전 슬라이드">← 이전</button><span data-page></span><button type="button" data-next aria-label="다음 슬라이드">다음 →</button>`;
+      document.body.appendChild(nav);
+      let index = 0, cleanup;
+      function show(value, updateHistory = false) {
+        const parsed = Number(value);
+        index = Number.isInteger(parsed) ? Math.max(0, Math.min(Deck.SLIDES.length - 1, parsed)) : 0;
+        cleanup?.();
+        const slide = Deck.SLIDES[index];
+        pet.setSlide(slide);
+        cleanup = build(slide, host, pet.place);
+        nav.querySelector('[data-page]').textContent = `${index + 1} / ${Deck.SLIDES.length}`;
+        nav.querySelector('[data-prev]').disabled = index === 0;
+        nav.querySelector('[data-next]').disabled = index === Deck.SLIDES.length - 1;
+        singleQuery.set('i', index);
+        header.querySelector('[data-single-mode]').href = `?${singleQuery}`;
+        if (updateHistory) {
+          const url = new URL(location.href);
+          url.searchParams.set('view', 'single');
+          url.searchParams.set('i', index);
+          history.pushState(null, '', url);
+        }
+      }
+      nav.querySelector('[data-prev]').addEventListener('click', () => show(index - 1, true));
+      nav.querySelector('[data-next]').addEventListener('click', () => show(index + 1, true));
+      document.addEventListener('keydown', (event) => {
+        if (event.target.closest('input, textarea, select, [contenteditable="true"]')) return;
+        if (event.key === 'ArrowRight' || event.key === 'ArrowLeft') {
+          event.preventDefault();
+          show(index + (event.key === 'ArrowRight' ? 1 : -1), true);
+        }
+      });
+      window.addEventListener('popstate', () => show(new URLSearchParams(location.search).get('i')));
+      show(qs.get('i'));
+    } else {
+      const grid = document.createElement('div');
+      grid.className = 'grid';
+      document.body.appendChild(grid);
+      pet.setSlide(Deck.SLIDES[0]);
+      const visible = new Set();
+      let currentCell = null;
+      function activate(cell) {
+        if (currentCell === cell) return;
+        currentCell?.classList.remove('active');
+        currentCell = cell;
+        cell.classList.add('active');
+        pet.setSlide(Deck.SLIDES[Number(cell.dataset.index)]);
+      }
+      function followScroll() {
+        const nearest = [...visible].sort((a, b) => {
+          const distance = (el) => Math.abs(el.getBoundingClientRect().top + el.clientHeight / 2 - innerHeight / 2);
+          return distance(a) - distance(b) || Number(a.dataset.index) - Number(b.dataset.index);
+        })[0];
+        if (nearest) activate(nearest);
+      }
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((e) => e.isIntersecting ? visible.add(e.target) : visible.delete(e.target));
+        followScroll();
+      });
+      document.addEventListener('scroll', followScroll, { passive: true });
+      Deck.SLIDES.forEach((s, i) => {
+        const cell = document.createElement('div');
+        cell.className = 'cell viewport';
+        cell.dataset.index = i;
+        const query = new URLSearchParams(qs);
+        query.set('view', 'single');
+        query.set('i', i);
+        cell.innerHTML = `<a class="slide-open" href="?${query}" aria-label="${i + 1}번 슬라이드 크게 보기"><span class="tagno">${i} · ${s.id} ↗</span></a>`;
+        grid.appendChild(cell);
+        build(s, cell);
+        cell.addEventListener('pointerenter', () => activate(cell));
+        cell.addEventListener('focusin', () => activate(cell));
+        observer.observe(cell);
+      });
+    }
+  </script>
+</body>
+</html>
